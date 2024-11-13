@@ -12,6 +12,12 @@ cloudinary.config({
   api_secret: process.env.API_SCRET,
 });
 
+
+Router.get("/",(req,res)=>{
+    res.status(200).json({
+        message:"Workint correctlly"
+    })
+})
 // post user data
 
 Router.post("/signup", async (req, res) => {
