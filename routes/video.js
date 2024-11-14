@@ -132,7 +132,7 @@ Router.delete("/:videoId", checkAuth, async (req, res) => {
     console.log("video:", video);
     if (video && video.user_id.toString() === veryfiedUser.id) {     
       if (video.videoId) {
-        await cloudinary.uploader.destroy(video.videoId);
+        await cloudinary.uploader.destroy(video.videoId,{resource_type:'video'});
       }
       if (video.thumbnailId) {
         await cloudinary.uploader.destroy(video.thumbnailId);
