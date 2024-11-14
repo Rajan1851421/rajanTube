@@ -70,7 +70,7 @@ RESPONSE
 }
 
 3.
- http://localhost:3000/video/67357c3fb179181dce0bea3c
+ http://localhost:3000/video/id
  PUT METHOD
 
  title,discription,tags,thunailUrl,category
@@ -105,3 +105,37 @@ RESPONSE
     }
 }
 
+4. http://localhost:3000/video/id
+DELETE METHOD
+
+Send bearer token only
+
+RESPONSE IS 
+{
+    "message": "Video deleted successfully",
+    "data": {
+        "_id": "6735974132ced16090f6e042",
+        "title": "MCA",
+        "discription": "mern stack developer mast hai",
+        "user_id": "673480abe611185ee2a995e8",
+        "videoUrl": "https://res.cloudinary.com/ds8ttmj8w/video/upload/v1731565376/cfaqaaupbhihyapow7xq.mp4",
+        "videoId": "cfaqaaupbhihyapow7xq",
+        "thumbnailUrl": "https://res.cloudinary.com/ds8ttmj8w/image/upload/v1731565377/qlw9k4xisask889jxusk.png",
+        "thumbnailId": "qlw9k4xisask889jxusk",
+        "category": "web dev mini",
+        "tags": [
+            "mern",
+            "fullstack",
+            "coputer"
+        ],
+        "likes": 0,
+        "dislike": 0,
+        "likedby": [],
+        "dislikedby": [],
+        "viewby": [],
+        "views": 0,
+        "createdAt": "2024-11-14T06:22:57.755Z",
+        "updatedAt": "2024-11-14T06:22:57.755Z",
+        "__v": 0
+    }
+}

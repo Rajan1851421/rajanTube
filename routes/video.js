@@ -55,6 +55,8 @@ Router.post("/upload", auth, async (req, res) => {
   }
 });
 
+// update video by id
+
 Router.put("/:videoId", checkAuth, async (req, res) => {
   try {
     const veryfiedUser = await jwt.verify(
@@ -80,26 +82,30 @@ Router.put("/:videoId", checkAuth, async (req, res) => {
           thumbnailId: updatedThumbnail.public_id,
         };
 
-        const updatedVideoDetails = await Video.findByIdAndUpdate(req.params.videoId,updatedData)
+        const updatedVideoDetails = await Video.findByIdAndUpdate(
+          req.params.videoId,
+          updatedData
+        );
         res.status(200).json({
-            upadted_Video:updatedVideoDetails
-        })
-      }else{
+          upadted_Video: updatedVideoDetails,
+        });
+      } else {
         const updatedData = {
-            title: req.body.title,
-            discription: req.body.discription,
-            category: req.body.category,
-            tags: req.body.tags.split(",")           
-          };
-  
-          const updatedVideoDetails = await Video.findByIdAndUpdate(req.params.videoId,updatedData,{new:true})
-          res.status(200).json({
-              upadted_Video:updatedVideoDetails
-          })
+          title: req.body.title,
+          discription: req.body.discription,
+          category: req.body.category,
+          tags: req.body.tags.split(","),
+        };
+
+        const updatedVideoDetails = await Video.findByIdAndUpdate(
+          req.params.videoId,
+          updatedData,
+          { new: true }
+        );
+        res.status(200).json({
+          upadted_Video: updatedVideoDetails,
+        });
       }
-
-
-
     } else {
       return res.status(500).json({
         message: "You are unathorized",
@@ -109,6 +115,39 @@ Router.put("/:videoId", checkAuth, async (req, res) => {
     console.log(error);
     res.status(500).json({
       error: error,
+    });
+  }
+});
+
+// delete video by id
+
+Router.delete("/:videoId", checkAuth, async (req, res) => {
+  try {
+    const veryfiedUser = await jwt.verify(
+      req.headers.authorization.split(" ")[1],
+      process.env.JWT_SECRET
+    );
+    console.log(veryfiedUser);
+    const video = await Video.findById(req.params.videoId);
+    console.log("video:", video);
+    if (video && video.user_id.toString() === veryfiedUser.id) {     
+      if (video.videoId) {
+        await cloudinary.uploader.destroy(video.videoId);
+      }
+      if (video.thumbnailId) {
+        await cloudinary.uploader.destroy(video.thumbnailId);
+      }
+      const deletedVideo = await Video.findByIdAndDelete(req.params.videoId);
+      res.status(200).json({
+        message: "Video deleted successfully",
+        data: deletedVideo,
+      });
+      console.log("Deletion successful");
+    };
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: "APke aukat ki nahi hai",
     });
   }
 });
