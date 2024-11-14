@@ -7,6 +7,7 @@ app.use(cors())
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
 const userRoute = require('./routes/user')
+const videoRoute = require('./routes/video')
 
 
 
@@ -30,6 +31,7 @@ app.use(fileUpload({
 
 // ALL user routes
 app.use("/user",userRoute)
+app.use("/video",videoRoute)
 
 
 

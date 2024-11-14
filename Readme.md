@@ -20,6 +20,7 @@ response is
 }
 
 2.
+
 http://localhost:3000/user/login
 POST METHOD
 
@@ -35,3 +36,72 @@ RESPONSE is
     },
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3MzQ2ZDhlZmU0NDlkOTdhZjczZjU1ZiIsImVtYWlsIjoicmFqYW5wcmFqYXBhdGk3NDAzQGdtYWlsLmNvbSIsImNoYW5uZWxOYW1lIjoiUmFqYW5UdWJlIiwiaWF0IjoxNzMxNDkwODE0LCJleHAiOjE3MzE0OTQ0MTR9.VnTFTFKFgikU9x51dFAR7GjNzbaUHlIFYYp2Lv-ZYi4"
 }
+
+3. 
+http://localhost:3000/video/upload
+POST METHOD
+ title,discription,category,tags,video,thumbnailUrl and bearer Token 
+RESPONSE
+ {
+    "newVideo": {
+        "title": "MERN",
+        "discription": "mern stack developer",
+        "user_id": "673480abe611185ee2a995e8",
+        "videoUrl": "https://res.cloudinary.com/ds8ttmj8w/video/upload/v1731558462/k9bl7nlzxstudz28ludn.mp4",
+        "videoId": "k9bl7nlzxstudz28ludn",
+        "thumbnailUrl": "https://res.cloudinary.com/ds8ttmj8w/image/upload/v1731558463/qjxjbzjjin4hc0w6anl6.png",
+        "thumbnailId": "qjxjbzjjin4hc0w6anl6",
+        "category": "web dev",
+        "tags": [
+            "mern",
+            "fullstack"
+        ],
+        "likes": 0,
+        "dislike": 0,
+        "likedby": [],
+        "dislikedby": [],
+        "viewby": [],
+        "views": 0,
+        "_id": "67357c3fb179181dce0bea3c",
+        "createdAt": "2024-11-14T04:27:43.900Z",
+        "updatedAt": "2024-11-14T04:27:43.900Z",
+        "__v": 0
+    }
+}
+
+3.
+ http://localhost:3000/video/67357c3fb179181dce0bea3c
+ PUT METHOD
+
+ title,discription,tags,thunailUrl,category
+
+ response
+
+ {
+    "upadted_Video": {
+        "_id": "67357c3fb179181dce0bea3c",
+        "title": "MERN stack developer",
+        "discription": "mern stack developer mast hai",
+        "user_id": "673480abe611185ee2a995e8",
+        "videoUrl": "https://res.cloudinary.com/ds8ttmj8w/video/upload/v1731558462/k9bl7nlzxstudz28ludn.mp4",
+        "videoId": "k9bl7nlzxstudz28ludn",
+        "thumbnailUrl": "https://res.cloudinary.com/ds8ttmj8w/image/upload/v1731558463/qjxjbzjjin4hc0w6anl6.png",
+        "thumbnailId": "qjxjbzjjin4hc0w6anl6",
+        "category": "web dev",
+        "tags": [
+            "mern",
+            "fullstack",
+            "coputer"
+        ],
+        "likes": 0,
+        "dislike": 0,
+        "likedby": [],
+        "dislikedby": [],
+        "viewby": [],
+        "views": 0,
+        "createdAt": "2024-11-14T04:27:43.900Z",
+        "updatedAt": "2024-11-14T05:53:08.229Z",
+        "__v": 0
+    }
+}
+

@@ -68,7 +68,7 @@ Router.post("/login", async (req, res) => {
       user.password
     );
     if (!isPasswordMatch) {
-      return res.status(400).json({ message: "Invalid credentials" });
+      return res.status(400).json({ message: "Invalid Password" });
     }   
     const token = jwt.sign(
       { id: user._id, email: user.email, channelName: user.channelName },
@@ -82,6 +82,8 @@ Router.post("/login", async (req, res) => {
         email: user.email,
         channelName: user.channelName,
         logoUrl: user.logoUrl,
+        subcribers:user.subcribers,
+        subcribedChannels:user.subcribedChannels,
       },
       token: token, 
     });
