@@ -1,5 +1,5 @@
 const http = require("http");
-const app = require('../Backend/app.js')
+const app = require('./app.js')
 const server = http.createServer(app)
 const PORT =3000
 
