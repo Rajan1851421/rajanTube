@@ -15,8 +15,8 @@ const VideSchema = new mongoose.Schema(
     dislike:{type:Number,default:0},
     likedby:[ {type: mongoose.Schema.Types.ObjectId,ref: "User", },],
     dislikedby:[ {type: mongoose.Schema.Types.ObjectId,ref: "User", },],
-    viewby:[ {type: mongoose.Schema.Types.ObjectId,ref: "User", },],
     views:{type:Number,default:0},
+    // viewby:[ {type: mongoose.Schema.Types.ObjectId,ref: "User", },],
   },
   { timestamps: true }
 );

@@ -6,8 +6,9 @@ require('dotenv').config()
 app.use(cors())
 const bodyParser = require('body-parser')
 const fileUpload = require('express-fileupload')
-const userRoute = require('./routes/user')
-const videoRoute = require('./routes/video')
+const userRoute = require('./routes/user.js')
+const videoRoute = require('./routes/video.js')
+const commentRoute = require('./routes/comment.js')
 
 
 
@@ -32,6 +33,7 @@ app.use(fileUpload({
 // ALL user routes
 app.use("/user",userRoute)
 app.use("/video",videoRoute)
+app.use("/comment",commentRoute)
 
 
 

@@ -139,3 +139,137 @@ RESPONSE IS
         "__v": 0
     }
 }
+
+
+5. Like route
+
+http://localhost:3000/video/like/"6735d2a2b000e3a0763e41cd"(which are generate mongodb)
+PUT METHOD
+{"_id":{"$oid":"6735d2a2b000e3a0763e41cd"},"title":"MCA","discription":"mern stack developer mast hai","user_id":"673480abe611185ee2a995e8","videoUrl":"https://res.cloudinary.com/ds8ttmj8w/video/upload/v1731580576/xz9gt5jgfuugnbyxz7iz.mp4","videoId":"xz9gt5jgfuugnbyxz7iz","thumbnailUrl":"https://res.cloudinary.com/ds8ttmj8w/image/upload/v1731580578/ozvbjyujccshivzckmxn.png","thumbnailId":"ozvbjyujccshivzckmxn","category":"web dev mini","tags":["mern","fullstack","coputer"],"likes":{"$numberInt":"0"},"dislike":{"$numberInt":"1"},"likedby":[{"$oid":"67346be0954f054c860c081e"}],"dislikedby":[{"$oid":"67346be0954f054c860c081e"}],"viewby":[],"views":{"$numberInt":"0"},"createdAt":{"$date":{"$numberLong":"1731580578375"}},"updatedAt":{"$date":{"$numberLong":"1731580641231"}},"__v":{"$numberInt":"2"}}
+
+send Bearer toke in headers
+
+6. disLike route
+
+http://localhost:3000/video/dislike/videoId(which are generate mongodb)
+PUT METHOD
+
+send Bearer toke in headers
+
+
+7. 
+http://localhost:3000/user/subscribe/userId
+http://localhost:3000/user/unsubscribe/userId
+PUT METHOD
+send bearer token
+
+8. http://localhost:3000/video/views/videoId
+PUT METHOD
+
+9. http://localhost:3000/comment/new-comment/commentId
+POST method
+send in body and bearer token
+{
+    "commentText":"nice video"
+}
+
+response 
+{
+    "message": "Comment added",
+    "comment": {
+        "videoId": "6735d2a2b000e3a0763e41cd",
+        "userId": "673480abe611185ee2a995e8",
+        "commentText": "nice video",
+        "_id": "6736ef07a699fcd705a061dc",
+        "createdAt": "2024-11-15T06:49:43.941Z",
+        "updatedAt": "2024-11-15T06:49:43.941Z",
+        "__v": 0
+    }
+}
+
+
+
+10. http://localhost:3000/comment/videoId
+GET method
+{
+    "commentsList": [
+        {
+            "_id": "6736ee71a10ec4e31a602188",
+            "videoId": "6735d2a2b000e3a0763e41cd",
+            "userId": {
+                "_id": "673480abe611185ee2a995e8",
+                "channelName": "Blog"
+            },
+            "commentText": "dfjkhkjh djnkjsjdv",
+            "createdAt": "2024-11-15T06:47:13.860Z",
+            "updatedAt": "2024-11-15T06:47:13.860Z",
+            "__v": 0
+        },
+        {
+            "_id": "6736eea5a10ec4e31a60218a",
+            "videoId": "6735d2a2b000e3a0763e41cd",
+            "userId": {
+                "_id": "673480abe611185ee2a995e8",
+                "channelName": "Blog"
+            },
+            "commentText": "nice video",
+            "createdAt": "2024-11-15T06:48:05.079Z",
+            "updatedAt": "2024-11-15T06:48:05.079Z",
+            "__v": 0
+        },
+        {
+            "_id": "6736eefca10ec4e31a60218c",
+            "videoId": "6735d2a2b000e3a0763e41cd",
+            "userId": {
+                "_id": "673480abe611185ee2a995e8",
+                "channelName": "Blog"
+            },
+            "commentText": "nice video",
+            "createdAt": "2024-11-15T06:49:32.406Z",
+            "updatedAt": "2024-11-15T06:49:32.406Z",
+            "__v": 0
+        },
+        {
+            "_id": "6736ef07a699fcd705a061dc",
+            "videoId": "6735d2a2b000e3a0763e41cd",
+            "userId": {
+                "_id": "673480abe611185ee2a995e8",
+                "channelName": "Blog"
+            },
+            "commentText": "nice video",
+            "createdAt": "2024-11-15T06:49:43.941Z",
+            "updatedAt": "2024-11-15T06:49:43.941Z",
+            "__v": 0
+        }
+    ]
+}
+
+
+11. http://localhost:3000/comment/commentId
+PUT METHOD
+send data in body and bearer token
+{
+    "commentText":"Hello nice way ::::"
+}
+
+{
+    "message": "Comment updated successfully",
+    "comment": {
+        "_id": "6736eea5a10ec4e31a60218a",
+        "videoId": "6735d2a2b000e3a0763e41cd",
+        "userId": "673480abe611185ee2a995e8",
+        "commentText": "Hello nice way ::::",
+        "createdAt": "2024-11-15T06:48:05.079Z",
+        "updatedAt": "2024-11-15T07:36:10.409Z",
+        "__v": 0
+    }
+}
+
+
+11. http://localhost:3000/comment/commentId
+
+DELETE METHOD
+
+{
+    "message": "deleted data successfully"
+}

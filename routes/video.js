@@ -127,12 +127,14 @@ Router.delete("/:videoId", checkAuth, async (req, res) => {
       req.headers.authorization.split(" ")[1],
       process.env.JWT_SECRET
     );
-    console.log(veryfiedUser);
+    //console.log(veryfiedUser);
     const video = await Video.findById(req.params.videoId);
-    console.log("video:", video);
-    if (video && video.user_id.toString() === veryfiedUser.id) {     
+    //console.log("video:", video);
+    if (video && video.user_id.toString() === veryfiedUser.id) {
       if (video.videoId) {
-        await cloudinary.uploader.destroy(video.videoId,{resource_type:'video'});
+        await cloudinary.uploader.destroy(video.videoId, {
+          resource_type: "video",
+        });
       }
       if (video.thumbnailId) {
         await cloudinary.uploader.destroy(video.thumbnailId);
@@ -142,14 +144,136 @@ Router.delete("/:videoId", checkAuth, async (req, res) => {
         message: "Video deleted successfully",
         data: deletedVideo,
       });
-      console.log("Deletion successful");
-    };
+      //console.log("Deletion successful");
+    }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(500).json({
       error: "APke aukat ki nahi hai",
     });
   }
 });
+
+// video like api
+
+Router.put("/like/:videoId", checkAuth, async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const verifiedUser = await jwt.verify(token, process.env.JWT_SECRET);
+
+    const video = await Video.findById(req.params.videoId);
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+
+    // Check if the user has already liked the video
+    if (video.likedby.includes(verifiedUser.id)) {
+      return res.status(400).json({ error: "Already liked" });
+    }
+
+    // Remove dislike if the user had previously disliked the video
+    if (video.dislikedby.includes(verifiedUser.id)) {
+      video.dislike -= 1;
+      video.dislikedby = video.dislikedby.filter(
+        (userId) => userId.toString() !== verifiedUser.id
+      );
+    }
+
+    // Increment likes and add the user to the liked list
+    video.likes += 1;
+    video.likedby.push(verifiedUser.id);
+
+    await video.save();
+
+    res.status(200).json({
+      message: "Video liked successfully",
+      likes: video.likes,
+      likedby: video.likedby,
+    });
+    console.log("Like successful");
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// dislike route
+
+Router.put("/dislike/:videoId", checkAuth, async (req, res) => {
+  try {
+    // Verify the JWT token
+    const verifiedUser = await jwt.verify(
+      req.headers.authorization.split(" ")[1],
+      process.env.JWT_SECRET
+    );
+    console.log("Verified User:", verifiedUser);
+
+    // Find the video by ID
+    const video = await Video.findById(req.params.videoId);
+
+    // Check if the video exists
+    if (!video) {
+      return res.status(404).json({
+        error: "Video not found",
+      });
+    }
+
+    // Check if the user has already disliked the video
+    if (video.dislikedby.includes(verifiedUser.id)) {
+      console.log("Already disliked");
+      return res.status(400).json({
+        error: "Already disliked",
+      });
+    }
+
+    // If the user has previously liked the video, remove their like
+    if (video.likedby.includes(verifiedUser.id)) {
+      video.likes -= 1;
+      video.likedby = video.likedby.filter(
+        (userId) => userId.toString() !== verifiedUser.id
+      );
+    }
+
+    // Add user ID to dislikedby array and increment dislikes count
+    video.dislikedby.push(verifiedUser.id);
+    video.dislike += 1;
+
+    // Save the updated video document
+    await video.save();
+
+    res.status(200).json({
+      message: "Video disliked successfully",
+      dislikes: video.dislike,
+      dislikedby: video.dislikedby,
+    });
+    console.log("Dislike successful");
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({
+      error: "Internal server error",
+      details: error.message,
+    });
+  }
+});
+
+//   view video  api
+Router.put("/views/:videoId", async (req, res) => {
+  try {
+    const video = await Video.findById(req.params.videoId);
+    video.views +=1
+    await video.save()
+    res.status(200).json({
+        message:"Views added ..."
+    })
+    console.log("vide",video)
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: error,
+    });
+  }
+});
+
+
 
 module.exports = Router;
