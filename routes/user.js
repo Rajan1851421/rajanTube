@@ -1,6 +1,6 @@
 const express = require("express");
 const Router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const cloudinary = require("cloudinary").v2;
 require("dotenv").config();
 const User = require("../models/User.js");
