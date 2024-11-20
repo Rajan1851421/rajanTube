@@ -273,3 +273,8 @@ DELETE METHOD
 {
     "message": "deleted data successfully"
 }
+
+
+12. get all videos 
+http://localhost:3000/video
+GET METHOD

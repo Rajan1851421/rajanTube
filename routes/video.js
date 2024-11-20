@@ -260,12 +260,12 @@ Router.put("/dislike/:videoId", checkAuth, async (req, res) => {
 Router.put("/views/:videoId", async (req, res) => {
   try {
     const video = await Video.findById(req.params.videoId);
-    video.views +=1
-    await video.save()
+    video.views += 1;
+    await video.save();
     res.status(200).json({
-        message:"Views added ..."
-    })
-    console.log("vide",video)
+      message: "Views added ...",
+    });
+    console.log("vide", video);
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -274,6 +274,23 @@ Router.put("/views/:videoId", async (req, res) => {
   }
 });
 
+// get all videos
 
+Router.get("/", async (req, res) => {
+  try {
+    const videos = await Video.find(); // Fetch all videos from the database
+    res.status(200).json({
+      success: true,
+      data: videos,
+    });
+  } catch (error) {
+    console.error("Error fetching videos:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch videos",
+      error: error.message,
+    });
+  }
+});
 
 module.exports = Router;
