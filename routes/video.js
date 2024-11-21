@@ -13,27 +13,24 @@ cloudinary.config({
   api_secret: process.env.API_SCRET,
 });
 
+// getAll video for eown
 
-// getAll video for eown 
-
-Router.get('/own-video',checkAuth , async(req,res)=>{
+Router.get("/own-video", checkAuth, async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];
     const user = await jwt.verify(token, process.env.JWT_SECRET);
-    console.log(user)
-    const videos = await Video.find({user_id:user.id})
+    console.log(user);
+    const videos = await Video.find({ user_id: user.id });
     res.status(200).json({
-      videos:videos
-    })
-    
+      videos: videos,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
-      error:error
-    })
+      error: error,
+    });
   }
-})
-
+});
 
 Router.post("/upload", auth, async (req, res) => {
   try {
@@ -145,42 +142,31 @@ Router.put("/:videoId", checkAuth, async (req, res) => {
 
 Router.delete("/:videoId", checkAuth, async (req, res) => {
   try {
-    // Verify the token
     const token = req.headers.authorization?.split(" ")[1];
-    if (!token) {
-      return res.status(401).json({ error: "Authorization token is missing" });
-    }
 
     const verifiedUser = jwt.verify(token, process.env.JWT_SECRET);
     console.log("VerifiedUser:", verifiedUser);
 
-    // Find the video by ID
     const video = await Video.findById(req.params.videoId);
-    if (!video) {
-      return res.status(404).json({ error: "Video not found" });
-    }
+
     console.log("Video:", video);
 
-    // Check if the user is authorized to delete the video
-    if (video.user_id == verifiedUser.id) {
-      return res.status(403).json({ error: "You are not authorized to delete this video" });
-    }
+    if (video.user_id.toString() === verifiedUser.id) {
+      if (video.videoId) {
+        await cloudinary.uploader.destroy(video.videoId, {
+          resource_type: "video",
+        });
+      }
 
-    // Delete the video and its resources
-    if (video.videoId) {
-      await cloudinary.uploader.destroy(video.videoId, {
-        resource_type: "video",
+      if (video.thumbnailId) {
+        await cloudinary.uploader.destroy(video.thumbnailId);
+      }
+      const deletedVideo = await Video.findByIdAndDelete(req.params.videoId);
+      res.status(200).json({
+        message: "Video deleted successfully",
+        data: deletedVideo,
       });
     }
-    if (video.thumbnailId) {
-      await cloudinary.uploader.destroy(video.thumbnailId);
-    }
-
-    const deletedVideo = await Video.findByIdAndDelete(req.params.videoId);
-    res.status(200).json({
-      message: "Video deleted successfully",
-      data: deletedVideo,
-    });
   } catch (error) {
     console.error("Error during deletion:", error.message);
     res.status(500).json({
@@ -188,7 +174,6 @@ Router.delete("/:videoId", checkAuth, async (req, res) => {
     });
   }
 });
-
 
 // video like api
 
