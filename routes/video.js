@@ -145,36 +145,50 @@ Router.put("/:videoId", checkAuth, async (req, res) => {
 
 Router.delete("/:videoId", checkAuth, async (req, res) => {
   try {
-    const veryfiedUser = await jwt.verify(
-      req.headers.authorization.split(" ")[1],
-      process.env.JWT_SECRET
-    );
-    //console.log(veryfiedUser);
-    const video = await Video.findById(req.params.videoId);
-    //console.log("video:", video);
-    if (video && video.user_id.toString() === veryfiedUser.id) {
-      if (video.videoId) {
-        await cloudinary.uploader.destroy(video.videoId, {
-          resource_type: "video",
-        });
-      }
-      if (video.thumbnailId) {
-        await cloudinary.uploader.destroy(video.thumbnailId);
-      }
-      const deletedVideo = await Video.findByIdAndDelete(req.params.videoId);
-      res.status(200).json({
-        message: "Video deleted successfully",
-        data: deletedVideo,
-      });
-      //console.log("Deletion successful");
+    // Verify the token
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ error: "Authorization token is missing" });
     }
+
+    const verifiedUser = jwt.verify(token, process.env.JWT_SECRET);
+    console.log("VerifiedUser:", verifiedUser);
+
+    // Find the video by ID
+    const video = await Video.findById(req.params.videoId);
+    if (!video) {
+      return res.status(404).json({ error: "Video not found" });
+    }
+    console.log("Video:", video);
+
+    // Check if the user is authorized to delete the video
+    if (video.user_id == verifiedUser.id) {
+      return res.status(403).json({ error: "You are not authorized to delete this video" });
+    }
+
+    // Delete the video and its resources
+    if (video.videoId) {
+      await cloudinary.uploader.destroy(video.videoId, {
+        resource_type: "video",
+      });
+    }
+    if (video.thumbnailId) {
+      await cloudinary.uploader.destroy(video.thumbnailId);
+    }
+
+    const deletedVideo = await Video.findByIdAndDelete(req.params.videoId);
+    res.status(200).json({
+      message: "Video deleted successfully",
+      data: deletedVideo,
+    });
   } catch (error) {
-    //console.log(error);
+    console.error("Error during deletion:", error.message);
     res.status(500).json({
-      error: "APke aukat ki nahi hai",
+      error: "An error occurred while processing your request",
     });
   }
 });
+
 
 // video like api
 
