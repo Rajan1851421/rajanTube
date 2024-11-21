@@ -71,7 +71,7 @@ Router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid Password" });
     }
     const token = jwt.sign(
-      { id: user._id, email: user.email, channelName: user.channelName },
+      { id: user._id, email: user.email, channelName: user.channelName ,logoUrl:user.logoUrl },
       process.env.JWT_SECRET,
       { expiresIn: "30d" }
     );

@@ -13,6 +13,28 @@ cloudinary.config({
   api_secret: process.env.API_SCRET,
 });
 
+
+// getAll video for eown 
+
+Router.get('/own-video',checkAuth , async(req,res)=>{
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const user = await jwt.verify(token, process.env.JWT_SECRET);
+    console.log(user)
+    const videos = await Video.find({user_id:user.id})
+    res.status(200).json({
+      videos:videos
+    })
+    
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({
+      error:error
+    })
+  }
+})
+
+
 Router.post("/upload", auth, async (req, res) => {
   try {
     const token = req.headers.authorization.split(" ")[1];

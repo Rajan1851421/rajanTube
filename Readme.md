@@ -282,3 +282,8 @@ GET METHOD
 13. get all videos 
 http://localhost:3000/video/:id
 GET METHOD
+
+
+http://localhost:3000/video/own-video 
+GET METHOD SEND TOKEN ONLY
+USING THIS API GET PERTICULAR USER UPLOADED VIDEO SHOW
