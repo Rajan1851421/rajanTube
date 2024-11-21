@@ -278,3 +278,7 @@ DELETE METHOD
 12. get all videos 
 http://localhost:3000/video
 GET METHOD
+
+13. get all videos 
+http://localhost:3000/video/:id
+GET METHOD
