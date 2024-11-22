@@ -13,10 +13,19 @@ cloudinary.config({
   api_secret: process.env.API_SCRET,
 });
 
-Router.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Workint correctlly",
-  });
+// get All user
+Router.get("/", async (req, res) => {
+  try {
+    const allUsers = await User.find();
+    console.log(allUsers)
+    res.status(200).json({
+      Allusers: allUsers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: error.message,  // Send the error message for debugging
+    });
+  }
 });
 // post user data
 
@@ -71,7 +80,12 @@ Router.post("/login", async (req, res) => {
       return res.status(400).json({ message: "Invalid Password" });
     }
     const token = jwt.sign(
-      { id: user._id, email: user.email, channelName: user.channelName ,logoUrl:user.logoUrl },
+      {
+        id: user._id,
+        email: user.email,
+        channelName: user.channelName,
+        logoUrl: user.logoUrl,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "30d" }
     );
@@ -157,9 +171,10 @@ Router.put("/unsubscribe/:userBId", checkAuth, async (req, res) => {
 
       // Update user A's subscribedChannels to remove user B's ID
       const userAfullInformation = await User.findById(userA.id);
-      userAfullInformation.subcribedChannels = userAfullInformation.subcribedChannels.filter(
-        (userId) => userId.toString() !== userB._id.toString()
-      );
+      userAfullInformation.subcribedChannels =
+        userAfullInformation.subcribedChannels.filter(
+          (userId) => userId.toString() !== userB._id.toString()
+        );
       await userAfullInformation.save();
 
       // Respond with success message
@@ -180,6 +195,8 @@ Router.put("/unsubscribe/:userBId", checkAuth, async (req, res) => {
     });
   }
 });
+
+
 
 
 module.exports = Router;

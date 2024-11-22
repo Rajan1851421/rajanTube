@@ -287,3 +287,7 @@ GET METHOD
 http://localhost:3000/video/own-video 
 GET METHOD SEND TOKEN ONLY
 USING THIS API GET PERTICULAR USER UPLOADED VIDEO SHOW
+
+
+getALlusers API 
+http://localhost:3000/user  GET METHOD 
