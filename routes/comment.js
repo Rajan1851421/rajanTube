@@ -34,7 +34,7 @@ Router.get("/:videoId", async (req, res) => {
   try {
     const allComments = await Comment.find({
       videoId: req.params.videoId,
-    }).populate("userId", "channelName", "logoUrl");
+    }).populate("userId", "channelName");
     res.status(200).json({
       commentsList: allComments,
     });
