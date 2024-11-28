@@ -28,6 +28,20 @@ Router.post("/new-comment/:videoId", checkAuth, async (req, res) => {
   }
 });
 
+// get all comments publically
+Router.get("/", async (req, res) => {
+  try {
+    const publicComment = await Comment.find();
+    res.status(200).json({
+      message: publicComment,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: error.message,
+    });
+  }
+});
 // get all comment by id
 
 Router.get("/:videoId", async (req, res) => {
@@ -55,12 +69,12 @@ Router.put("/:commentId", checkAuth, async (req, res) => {
     const getComment = await Comment.findById(req.params.commentId);
     console.log("All ", getComment);
     if (getComment.userId != verifiedUser.id) {
-        res.status(500).json({
-            error:'invalid user'
-        })
+      res.status(500).json({
+        error: "invalid user",
+      });
     }
-    getComment.commentText = req.body.commentText
-    const updatedComment = await getComment.save()    
+    getComment.commentText = req.body.commentText;
+    const updatedComment = await getComment.save();
 
     res.status(200).json({
       message: "Comment updated successfully",
@@ -77,32 +91,31 @@ Router.put("/:commentId", checkAuth, async (req, res) => {
 
 // delete comment by id
 Router.delete("/:commentId", checkAuth, async (req, res) => {
-    try {
-      const token = req.headers.authorization.split(" ")[1];
-      const verifiedUser = await jwt.verify(token, process.env.JWT_SECRET);
-      console.log("comment", verifiedUser);
-      const getComment = await Comment.findById(req.params.commentId);
-      console.log("All ", getComment);
-      if (getComment.userId != verifiedUser.id) {
-          res.status(500).json({
-              error:'invalid user'
-          })
-      }
-
-      const response = await Comment.findByIdAndDelete(req.params.commentId)
-
-      getComment.commentText = req.body.commentText     
-        res.status(200).json({
-        message: "deleted data successfully",
-        
-      });
-    } catch (error) {
-      console.log(error);
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const verifiedUser = await jwt.verify(token, process.env.JWT_SECRET);
+    console.log("comment", verifiedUser);
+    const getComment = await Comment.findById(req.params.commentId);
+    console.log("All ", getComment);
+    if (getComment.userId != verifiedUser.id) {
       res.status(500).json({
-        error: error,
-        details: error.message,
+        error: "invalid user",
       });
     }
-  });
+
+    const response = await Comment.findByIdAndDelete(req.params.commentId);
+
+    getComment.commentText = req.body.commentText;
+    res.status(200).json({
+      message: "deleted data successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      error: error,
+      details: error.message,
+    });
+  }
+});
 
 module.exports = Router;

@@ -291,3 +291,5 @@ USING THIS API GET PERTICULAR USER UPLOADED VIDEO SHOW
 
 getALlusers API 
 http://localhost:3000/user  GET METHOD 
+
+http://localhost:3000/comment get all comment for publically (GET METHOD)
